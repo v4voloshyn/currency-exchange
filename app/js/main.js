@@ -13,9 +13,24 @@ const rates = {
       "Nominal": 1,
       "Name": "Росийский рубль",
       "Value": "rubValue",
-      "Previous": "rubPrevious"
+      "Previous": "rubPrevious",
       }
    }
+
+   const inputField = document.querySelector('#input');
+   const resultField = document.querySelector('#result');
+   const selectField = document.querySelector('#select');
+   const outputValue = selectField.value;
+   let inputCurrencyName = document.querySelector('option').getAttribute('data-input-value'); //'UAH' по умолчанию
+   console.log(inputCurrencyName);
+   let outputCurrencyName = document.querySelector('option').getAttribute('value'); 
+   console.log(outputCurrencyName);
+
+
+   const elementUSD = document.querySelector('[data-value="USD"]');
+   const elementEUR = document.querySelector('[data-value="EUR"]');
+   const elementGBP = document.querySelector('[data-value="GBP"]');
+   
 getCurrencies();
 
 
@@ -35,9 +50,43 @@ async function getCurrencies()   {
    rates.EUR = data.Valute.EUR;
    rates.GBP = data.Valute.GBP;
    rates.TRY = data.Valute.TRY;
-   console.log(rates);
+   console.log(rates.USD);
+   elementUSD.textContent = (rates.USD.Value / rubValue ).toFixed(2);
+   elementGBP.textContent = (rates.GBP.Value / rubValue ).toFixed(2);
+   elementEUR.textContent = (rates.EUR.Value/ rubValue ).toFixed(2);
+   //Цвет для информера USD
+   if (rates.USD.Value > rates.USD.Previous) {
+      elementUSD.classList.add('top');
+   } else {
+      elementUSD.classList.add('bottom');
+   }
+
+   //Цвет для информера EUR
+   if (rates.EUR.Value > rates.EUR.Previous) {
+      elementEUR.classList.add('top');
+   } else {
+      elementEUR.classList.add('bottom');
+   }
+
+   //Цвет для информера GBP
+   if (rates.GBP.Value > rates.GBP.Previous) {
+      elementGBP.classList.add('top');
+   } else {
+      elementGBP.classList.add('bottom');
+   }
 }
 
+
+inputField.oninput = function() {
+   resultField.value = (parseFloat(inputField.value) * rates.RUB.Value / (rates[select.value].Value / rates[select.value].Nominal)).toFixed(2);
+   console.log(rates.USD.Value);
+}
+select.oninput = function() {
+   resultField.value = (parseFloat(inputField.value) * rates.RUB.Value / (rates[select.value].Value / rates[select.value].Nominal)).toFixed(2);
+   console.log(rates.USD.Value);
+}
+
+// console.log(input);
 
 // (Value / Nominal) /  (Value / Nominal)
 // (27.5\10) \ (73.5\1) = 
